@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Memory Game</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="size_3x4">3x4</string>
+    <string name="size_5x2">5x2</string>
+    <string name="size_4x4">4x4</string>
+    <string name="size_4x5">4x5</string>
+</resources>
