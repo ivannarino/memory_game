@@ -7,7 +7,7 @@ import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ViewSwitcher
-import androidx.annotation.DrawableRes
+import com.nex0s.android.memorygame.model.Card
 import com.tekle.oss.android.animation.AnimationFactory
 
 class GameCardView @JvmOverloads constructor(
@@ -16,9 +16,15 @@ class GameCardView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
+    interface OnCardReveal {
+        fun onCardReveal(gameCardView: GameCardView, card: Card)
+    }
+
     private val switcher: ViewSwitcher
     private val frontImage: ImageView
     private val backImage: ImageView
+    private var clickListener: OnCardReveal? = null
+    private var card: Card? = null
 
     init {
         LayoutInflater.from(getContext()).inflate(R.layout.view_game_card, this, true)
@@ -27,12 +33,21 @@ class GameCardView @JvmOverloads constructor(
         frontImage = findViewById(R.id.frontImage)
         backImage = findViewById(R.id.backImage)
 
-        switcher.inAnimation = AnimationUtils.loadAnimation(context, R.anim.nav_default_pop_enter_anim)
-        switcher.outAnimation = AnimationUtils.loadAnimation(context, R.anim.nav_default_pop_exit_anim)
+        switcher.setOnClickListener {
+            card?.let {
+                if (switcher.displayedChild == 0) {
+                    clickListener?.onCardReveal(this, it)
+                }
+            }
+        }
     }
 
     fun flipCard() {
         AnimationFactory.flipTransition(switcher, AnimationFactory.FlipDirection.LEFT_RIGHT)
+    }
+
+    fun setOnCardClickListener(listener: OnCardReveal) {
+        this.clickListener = listener
     }
 
     fun reset() {
@@ -41,9 +56,9 @@ class GameCardView @JvmOverloads constructor(
         }
     }
 
-    fun bind(@DrawableRes frontDrawable: Int, @DrawableRes backDrawable: Int) {
-        frontImage.setImageResource(frontDrawable)
-        backImage.setImageResource(backDrawable)
+    fun bind(card: Card) {
+        this.card = card
+        frontImage.setImageResource(card.frontImage)
+        backImage.setImageResource(card.backImage)
     }
-
 }

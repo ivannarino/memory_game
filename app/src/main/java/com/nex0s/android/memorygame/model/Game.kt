@@ -12,16 +12,16 @@ enum class Size(val horizontalCount: Int, val verticalCount: Int) {
 }
 
 val cardDeck = arrayOf(
-    Card(R.drawable.memory_bat),
-    Card(R.drawable.memory_cat),
-    Card(R.drawable.memory_cow),
-    Card(R.drawable.memory_dragon),
-    Card(R.drawable.memory_garbage_man),
-    Card(R.drawable.memory_ghost_dog),
-    Card(R.drawable.memory_hen),
-    Card(R.drawable.memory_horse),
-    Card(R.drawable.memory_pig),
-    Card(R.drawable.memory_spider)
+    Card(R.drawable.memory_bat, R.drawable.all_card_backs),
+    Card(R.drawable.memory_cat, R.drawable.all_card_backs),
+    Card(R.drawable.memory_cow, R.drawable.all_card_backs),
+    Card(R.drawable.memory_dragon, R.drawable.all_card_backs),
+    Card(R.drawable.memory_garbage_man, R.drawable.all_card_backs),
+    Card(R.drawable.memory_ghost_dog, R.drawable.all_card_backs),
+    Card(R.drawable.memory_hen, R.drawable.all_card_backs),
+    Card(R.drawable.memory_horse, R.drawable.all_card_backs),
+    Card(R.drawable.memory_pig, R.drawable.all_card_backs),
+    Card(R.drawable.memory_spider, R.drawable.all_card_backs)
 )
 
 class Game(private val size: Size) {
@@ -63,4 +63,4 @@ class Game(private val size: Size) {
     }
 }
 
-class Card(@DrawableRes val image: Int)
+data class Card(@DrawableRes val frontImage: Int, @DrawableRes val backImage: Int)
