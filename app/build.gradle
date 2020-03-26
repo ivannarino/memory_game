@@ -59,6 +59,8 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.1.0'
 
+    implementation 'com.github.okitcom:flip:1.0.0'
+
     // Dynamic Feature Module Support
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
 
