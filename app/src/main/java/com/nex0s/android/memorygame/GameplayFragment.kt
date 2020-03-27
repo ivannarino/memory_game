@@ -30,12 +30,9 @@ class GameplayFragment : Fragment(), GameCardView.OnCardReveal {
             setDisplayHomeAsUpEnabled(true)
             title = "${args.size.horizontalCount} x ${args.size.verticalCount} Game"
         }
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        audioHelper = AudioHelper(requireContext())
-        audioHelper.playBackground()
+        audioHelper = AudioHelper(context)
+        lifecycle.addObserver(audioHelper)
     }
 
     override fun onCreateView(
@@ -133,11 +130,5 @@ class GameplayFragment : Fragment(), GameCardView.OnCardReveal {
                 //throw IllegalStateException("Only two cards can be compared at the same time")
             }
         }
-    }
-
-    override fun onDestroy() {
-        audioHelper.releaseResources()
-        selectedCardsView.clear()
-        super.onDestroy()
     }
 }
