@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.GameplayFragment">
 
-    <com.nex0s.android.memorygame.widget.CardBoardView
+    <com.nex0s.android.memorygame.ui.widget.CardBoardView
         android:id="@+id/gameContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

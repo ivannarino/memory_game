@@ -1,4 +1,4 @@
-package com.nex0s.android.memorygame.model
+package com.nex0s.android.memorygame.business
 
 import androidx.annotation.DrawableRes
 import com.nex0s.android.memorygame.R

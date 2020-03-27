@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.nex0s.android.memorygame.R
+import com.nex0s.android.memorygame.business.Card
+import com.nex0s.android.memorygame.business.Game
 import com.nex0s.android.memorygame.helper.AudioHelper
-import com.nex0s.android.memorygame.model.Card
-import com.nex0s.android.memorygame.model.Game
-import com.nex0s.android.memorygame.widget.CardBoardView
+import com.nex0s.android.memorygame.ui.widget.CardBoardView
 import kotlinx.android.synthetic.main.fragment_gameplay.*
 import kotlinx.coroutines.*
 import nl.dionsegijn.konfetti.models.Shape
@@ -73,11 +73,13 @@ class GameplayFragment : Fragment(), CardBoardView.OnTwoCardsReveal, CardBoardVi
             .streamFor(300, 5000L)
     }
 
-    private fun doDelayed(function: () -> Unit) {
+    private fun Fragment.doDelayed(function: () -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             delay(1_000)
             withContext(Dispatchers.Main) {
-                function()
+                view?.let {
+                    function()
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.nex0s.android.memorygame.widget
+package com.nex0s.android.memorygame.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet
@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.ViewSwitcher
 import androidx.core.view.setPadding
 import com.nex0s.android.memorygame.R
-import com.nex0s.android.memorygame.model.Card
+import com.nex0s.android.memorygame.business.Card
 import com.tekle.oss.android.animation.AnimationFactory
 
 class GameCardView @JvmOverloads constructor(

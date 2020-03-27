@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.nex0s.android.memorygame.R
 
 class VictoryDialogFragment : DialogFragment() {
 
@@ -15,10 +16,10 @@ class VictoryDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         isCancelable = false
         return AlertDialog.Builder(requireActivity())
-            .setTitle("Congratulations")
-            .setMessage("You tried ${args.tries} times, in ${DateUtils.formatElapsedTime(args.elapsedTime / 1000)}")
+            .setTitle(getString(R.string.victory_title))
+            .setMessage(getString(R.string.victory_msg, args.tries, DateUtils.formatElapsedTime(args.elapsedTime / 1000)))
             .setCancelable(false)
-            .setPositiveButton("Return to lobby") { _, _ ->
+            .setPositiveButton(getString(R.string.victory_return_to_lobby)) { _, _ ->
                 val action =
                     VictoryDialogFragmentDirections.actionVictoryDialogFragmentToLobbyFragment()
                 findNavController().navigate(action)

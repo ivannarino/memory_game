@@ -22,7 +22,7 @@
         <argument
             android:name="size"
             android:defaultValue="SIZE_3x4"
-            app:argType="com.nex0s.android.memorygame.model.Size" />
+            app:argType="com.nex0s.android.memorygame.business.Size" />
         <action
             android:id="@+id/action_gameplayFragment_to_victoryDialogFragment"
             app:destination="@id/victoryDialogFragment" />

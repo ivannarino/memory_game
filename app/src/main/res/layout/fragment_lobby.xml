@@ -9,7 +9,7 @@
 
         <import type="com.nex0s.android.memorygame.ui.LobbyFragmentDirections" />
 
-        <import type="com.nex0s.android.memorygame.model.Size" />
+        <import type="com.nex0s.android.memorygame.business.Size" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

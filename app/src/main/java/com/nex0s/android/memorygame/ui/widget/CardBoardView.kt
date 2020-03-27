@@ -1,14 +1,14 @@
-package com.nex0s.android.memorygame.widget
+package com.nex0s.android.memorygame.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import androidx.core.view.doOnPreDraw
-import com.nex0s.android.memorygame.model.Card
-import com.nex0s.android.memorygame.model.Size
-import com.nex0s.android.memorygame.model.first
-import com.nex0s.android.memorygame.model.second
+import com.nex0s.android.memorygame.business.Card
+import com.nex0s.android.memorygame.business.Size
+import com.nex0s.android.memorygame.business.first
+import com.nex0s.android.memorygame.business.second
 import java.lang.ref.WeakReference
 
 class CardBoardView @JvmOverloads constructor(
