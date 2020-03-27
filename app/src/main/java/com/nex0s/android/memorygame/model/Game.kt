@@ -2,13 +2,16 @@ package com.nex0s.android.memorygame.model
 
 import androidx.annotation.DrawableRes
 import com.nex0s.android.memorygame.R
-import java.lang.IllegalStateException
 
 enum class Size(val horizontalCount: Int, val verticalCount: Int) {
     SIZE_3x4(3, 4),
     SIZE_5x2(5, 2),
     SIZE_4x4(4, 4),
     SIZE_4x5(4, 5)
+}
+
+fun Size.totalCards() : Int {
+    return this.verticalCount * this.horizontalCount
 }
 
 val cardDeck = arrayOf(
@@ -27,15 +30,17 @@ val cardDeck = arrayOf(
 class Game(private val size: Size) {
 
     private val foundPairs = mutableListOf<Card>()
+    private var startTime = 0L
+    private var endTime = 0L
+    var tries = 0
 
     fun shuffle(): List<Card> {
-        val deckCards = cardDeck.toMutableList()
+        startTime = System.currentTimeMillis()
 
-        val totalCards = size.horizontalCount * size.verticalCount
-        val cardPairs = totalCards / 2
+        val deckCards = cardDeck.toMutableList()
+        val cardPairs = size.totalCards() / 2
 
         val pickedCards = mutableListOf<Card>()
-
         for (i in 0 until cardPairs) {
             val pickedCard = deckCards.random()
             deckCards.remove(pickedCard)
@@ -49,11 +54,20 @@ class Game(private val size: Size) {
         return pickedCards
     }
 
-    fun isPairFound(card: Card): Boolean {
-        return foundPairs.contains(card)
+    fun checkCards(card1: Card, card2: Card): Boolean {
+        return if (card1 == card2) {
+            addPairFound(card1, card2)
+            if (foundPairs.size == size.totalCards()) {
+                endTime = System.currentTimeMillis()
+            }
+            true
+        } else {
+            tries++
+            false
+        }
     }
 
-    fun addPairFound(card1: Card, card2: Card) {
+    private fun addPairFound(card1: Card, card2: Card) {
         if (foundPairs.contains(card1) || foundPairs.contains(card2)) {
             throw IllegalStateException("Cannot add a pair if the pair has already been found")
         }
@@ -61,6 +75,17 @@ class Game(private val size: Size) {
         foundPairs.add(card1)
         foundPairs.add(card2)
     }
+
+    fun hasWon() = foundPairs.size == size.totalCards()
+
+    val elapsedTime: Long
+        get() {
+            return endTime - startTime
+        }
 }
 
 data class Card(@DrawableRes val frontImage: Int, @DrawableRes val backImage: Int)
+
+fun List<Card>.first() = this[0]
+
+fun List<Card>.second() = this[1]

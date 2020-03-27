@@ -2,20 +2,21 @@ package com.nex0s.android.memorygame
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.nex0s.android.memorygame.model.Card
 import com.nex0s.android.memorygame.model.Game
+import com.nex0s.android.memorygame.model.first
+import com.nex0s.android.memorygame.model.second
 import kotlinx.android.synthetic.main.fragment_gameplay.*
 import kotlinx.coroutines.*
-import java.util.concurrent.TimeUnit
 
 class GameplayFragment : Fragment(), GameCardView.OnCardReveal {
 
@@ -45,15 +46,6 @@ class GameplayFragment : Fragment(), GameCardView.OnCardReveal {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button5.setOnClickListener {
-            applyFunctionToCards {
-                it.reset()
-            }
-
-            selectedCards.clear()
-            selectedCardsView.clear()
-        }
-
         game = Game(args.size)
         val shuffledCards = game.shuffle()
 
@@ -72,15 +64,6 @@ class GameplayFragment : Fragment(), GameCardView.OnCardReveal {
         }
     }
 
-    private fun applyFunctionToCards(function: (GameCardView) -> Unit) {
-        for (x in 0 until args.size.verticalCount) {
-            val row = gameContainer.getChildAt(x) as ViewGroup
-            for (y in 0 until args.size.horizontalCount) {
-                function(row.getChildAt(y) as GameCardView)
-            }
-        }
-    }
-
     private val selectedCards = mutableListOf<Card>()
     private val selectedCardsView = mutableListOf<GameCardView>()
     override fun onCardReveal(gameCardView: GameCardView, card: Card) {
@@ -96,14 +79,28 @@ class GameplayFragment : Fragment(), GameCardView.OnCardReveal {
                 selectedCardsView.add(gameCardView)
                 selectedCards.add(card)
                 gameCardView.flipCard()
-                if (selectedCards[0] == selectedCards[1]) {
+                if (game.checkCards(selectedCards.first(), selectedCards.second())) {
                     CoroutineScope(Dispatchers.IO).launch {
                         delay(500)
                         withContext(Dispatchers.Main) {
                             audioHelper.playMatch()
-                            game.addPairFound(selectedCards[0], selectedCards[1])
+
+                        }
+                    }
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(2_000)
+                        withContext(Dispatchers.Main) {
                             selectedCards.clear()
                             selectedCardsView.clear()
+                            if (game.hasWon()) {
+                                audioHelper.stopBackground()
+                                audioHelper.playVictory()
+                                val action =
+                                    GameplayFragmentDirections.actionGameplayFragmentToVictoryDialogFragment()
+                                action.tries = game.tries
+                                action.elapsedTime = game.elapsedTime
+                                findNavController().navigate(action)
+                            }
                         }
                     }
                 } else {
@@ -125,9 +122,6 @@ class GameplayFragment : Fragment(), GameCardView.OnCardReveal {
                         }
                     }
                 }
-            }
-            else -> {
-                //throw IllegalStateException("Only two cards can be compared at the same time")
             }
         }
     }

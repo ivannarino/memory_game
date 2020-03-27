@@ -48,6 +48,14 @@ class AudioHelper(private val context: Context) : LifecycleObserver {
         playAudio(R.raw.smb3_flip)
     }
 
+    fun playVictory() {
+        playAudio(R.raw.smb3_1up)
+    }
+
+    fun stopBackground() {
+        backgroundMediaPlayer?.pause()
+    }
+
     private fun playAudio(@RawRes media: Int) {
         mediaPlayer?.let {
             it.stop()

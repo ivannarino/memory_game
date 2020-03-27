@@ -23,5 +23,24 @@
             android:name="size"
             android:defaultValue="SIZE_3x4"
             app:argType="com.nex0s.android.memorygame.model.Size" />
+        <action
+            android:id="@+id/action_gameplayFragment_to_victoryDialogFragment"
+            app:destination="@id/victoryDialogFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/victoryDialogFragment"
+        android:name="com.nex0s.android.memorygame.VictoryDialogFragment"
+        android:label="VictoryDialogFragment" >
+        <argument
+            android:name="tries"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="elapsedTime"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <action
+            android:id="@+id/action_victoryDialogFragment_to_lobbyFragment"
+            app:popUpTo="@id/lobbyFragment" />
+    </dialog>
 </navigation>
