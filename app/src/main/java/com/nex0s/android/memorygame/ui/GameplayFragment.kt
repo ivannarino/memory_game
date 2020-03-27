@@ -1,4 +1,4 @@
-package com.nex0s.android.memorygame
+package com.nex0s.android.memorygame.ui
 
 import android.content.Context
 import android.graphics.Color
@@ -10,8 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.nex0s.android.memorygame.R
+import com.nex0s.android.memorygame.helper.AudioHelper
 import com.nex0s.android.memorygame.model.Card
 import com.nex0s.android.memorygame.model.Game
+import com.nex0s.android.memorygame.widget.CardBoardView
 import kotlinx.android.synthetic.main.fragment_gameplay.*
 import kotlinx.coroutines.*
 import nl.dionsegijn.konfetti.models.Shape

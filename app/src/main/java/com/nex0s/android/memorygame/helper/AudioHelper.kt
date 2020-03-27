@@ -1,4 +1,4 @@
-package com.nex0s.android.memorygame
+package com.nex0s.android.memorygame.helper
 
 import android.content.Context
 import android.media.MediaPlayer
@@ -6,6 +6,7 @@ import androidx.annotation.RawRes
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import com.nex0s.android.memorygame.R
 import kotlinx.coroutines.*
 
 class AudioHelper(private val context: Context) : LifecycleObserver {

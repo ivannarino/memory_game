@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameplayFragment">
+    tools:context=".ui.GameplayFragment">
 
-    <com.nex0s.android.memorygame.CardBoardView
+    <com.nex0s.android.memorygame.widget.CardBoardView
         android:id="@+id/gameContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

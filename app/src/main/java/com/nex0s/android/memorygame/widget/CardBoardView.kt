@@ -1,4 +1,4 @@
-package com.nex0s.android.memorygame
+package com.nex0s.android.memorygame.widget
 
 import android.content.Context
 import android.util.AttributeSet

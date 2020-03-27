@@ -1,4 +1,4 @@
-package com.nex0s.android.memorygame
+package com.nex0s.android.memorygame.widget
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,6 +8,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.ViewSwitcher
 import androidx.core.view.setPadding
+import com.nex0s.android.memorygame.R
 import com.nex0s.android.memorygame.model.Card
 import com.tekle.oss.android.animation.AnimationFactory
 
