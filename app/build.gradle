@@ -67,8 +67,9 @@ dependencies {
 
     implementation 'com.github.okitcom:flip:1.0.0'
 
-    // Dynamic Feature Module Support
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+    implementation 'nl.dionsegijn:konfetti:1.2.0'
+
+    implementation 'androidx.core:core-ktx:1.2.0'
 
     // Testing Navigation
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"

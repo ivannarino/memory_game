@@ -1,6 +1,7 @@
 package com.nex0s.android.memorygame
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -17,6 +19,8 @@ import com.nex0s.android.memorygame.model.first
 import com.nex0s.android.memorygame.model.second
 import kotlinx.android.synthetic.main.fragment_gameplay.*
 import kotlinx.coroutines.*
+import nl.dionsegijn.konfetti.models.Shape
+import nl.dionsegijn.konfetti.models.Size
 
 class GameplayFragment : Fragment(), GameCardView.OnCardReveal {
 
@@ -49,19 +53,50 @@ class GameplayFragment : Fragment(), GameCardView.OnCardReveal {
         game = Game(args.size)
         val shuffledCards = game.shuffle()
 
-        var index = 0
-        for (x in 0 until args.size.verticalCount) {
-            val ll = LinearLayout(context)
-            for (y in 0 until args.size.horizontalCount) {
-                val gameCardView = GameCardView(requireContext())
-                gameCardView.bind(shuffledCards[index])
-                gameCardView.setOnCardClickListener(this)
-                ll.addView(gameCardView)
-                index++
+        gameContainer.doOnPreDraw {
+            val cardHeight = it.height / maxOf(args.size.verticalCount, args.size.horizontalCount)
+            val cardWidth = it.width / minOf(args.size.verticalCount, args.size.horizontalCount)
+            var index = 0
+            for (x in 0 until maxOf(args.size.verticalCount, args.size.horizontalCount)) {
+                val ll = LinearLayout(context)
+                for (y in 0 until minOf(args.size.verticalCount, args.size.horizontalCount)) {
+                    val gameCardView = GameCardView(requireContext())
+                    gameCardView.bind(shuffledCards[index])
+                    gameCardView.setSize(height = cardHeight, width = cardWidth)
+                    gameCardView.setOnCardClickListener(this)
+                    ll.addView(gameCardView)
+                    index++
+                }
+                ll.layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+                gameContainer.addView(ll)
             }
-            ll.layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            gameContainer.addView(ll)
         }
+    }
+
+    override fun onDestroy() {
+        selectedCardsView.clear()
+        super.onDestroy()
+    }
+
+    private fun showVictory() {
+        audioHelper.stopBackground()
+        audioHelper.playVictory()
+        val action =
+            GameplayFragmentDirections.actionGameplayFragmentToVictoryDialogFragment()
+        action.tries = game.tries
+        action.elapsedTime = game.elapsedTime
+        findNavController().navigate(action)
+
+        viewKonfetti.build()
+            .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+            .setDirection(0.0, 359.0)
+            .setSpeed(1f, 5f)
+            .setFadeOutEnabled(true)
+            .setTimeToLive(2000L)
+            .addShapes(Shape.Square, Shape.Circle)
+            .addSizes(Size(12))
+            .setPosition(-50f, viewKonfetti.width + 50f, -50f, -50f)
+            .streamFor(300, 5000L)
     }
 
     private val selectedCards = mutableListOf<Card>()
@@ -79,49 +114,32 @@ class GameplayFragment : Fragment(), GameCardView.OnCardReveal {
                 selectedCardsView.add(gameCardView)
                 selectedCards.add(card)
                 gameCardView.flipCard()
-                if (game.checkCards(selectedCards.first(), selectedCards.second())) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(500)
-                        withContext(Dispatchers.Main) {
-                            audioHelper.playMatch()
 
-                        }
-                    }
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(2_000)
-                        withContext(Dispatchers.Main) {
-                            selectedCards.clear()
-                            selectedCardsView.clear()
-                            if (game.hasWon()) {
-                                audioHelper.stopBackground()
-                                audioHelper.playVictory()
-                                val action =
-                                    GameplayFragmentDirections.actionGameplayFragmentToVictoryDialogFragment()
-                                action.tries = game.tries
-                                action.elapsedTime = game.elapsedTime
-                                findNavController().navigate(action)
-                            }
-                        }
-                    }
-                } else {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(500)
-                        withContext(Dispatchers.Main) {
-                            audioHelper.playMiss()
+                handleTwoCardsRevealed()
+            }
+        }
+    }
 
-                        }
-                    }
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(2_000)
-                        withContext(Dispatchers.Main) {
-                            selectedCardsView.forEach {
-                                it.flipCard()
-                            }
-                            selectedCards.clear()
-                            selectedCardsView.clear()
-                        }
-                    }
-                }
+    private fun handleTwoCardsRevealed() {
+        val isMatch = game.checkCards(selectedCards.first(), selectedCards.second())
+        if (isMatch) audioHelper.playMatch() else audioHelper.playMiss()
+
+        doDelayed {
+            when {
+                !isMatch -> selectedCardsView.forEach { it.flipCard() }
+                game.hasWon() -> showVictory()
+            }
+
+            selectedCards.clear()
+            selectedCardsView.clear()
+        }
+    }
+
+    private fun doDelayed(function: () -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(2_000)
+            withContext(Dispatchers.Main) {
+                function()
             }
         }
     }

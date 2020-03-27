@@ -6,6 +6,7 @@ import androidx.annotation.RawRes
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import kotlinx.coroutines.*
 
 class AudioHelper(private val context: Context) : LifecycleObserver {
     private var mediaPlayer: MediaPlayer? = null
@@ -37,11 +38,21 @@ class AudioHelper(private val context: Context) : LifecycleObserver {
     }
 
     fun playMatch() {
-        playAudio(R.raw.smb3_match)
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(500)
+            withContext(Dispatchers.Main) {
+                playAudio(R.raw.smb3_match)
+            }
+        }
     }
 
     fun playMiss() {
-        playAudio(R.raw.smb3_miss)
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(500)
+            withContext(Dispatchers.Main) {
+                playAudio(R.raw.smb3_miss)
+            }
+        }
     }
 
     fun playFlip() {

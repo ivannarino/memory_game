@@ -6,10 +6,15 @@
     tools:context=".GameplayFragment">
 
     <LinearLayout
-        android:gravity="center"
         android:id="@+id/gameContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:orientation="vertical"/>
+        android:layout_margin="@dimen/mat_4dp"
+        android:gravity="center"
+        android:orientation="vertical" />
+
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/viewKonfetti"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </FrameLayout>

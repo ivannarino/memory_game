@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/switcher"
-    android:layout_gravity="center"
-    android:layout_width="30dp"
-    android:layout_height="43dp"
-    android:foreground="?attr/selectableItemBackground">
+    tools:parentTag="android.widget.ViewSwitcher"
+    tools:layout_width="30dp"
+    tools:layout_height="43dp">
 
     <ImageView
+        android:foreground="?attr/selectableItemBackground"
         android:id="@+id/backImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        tools:ignore="ContentDescription" />
+        android:layout_gravity="center"
+        tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
         android:id="@+id/frontImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:adjustViewBounds="true"
         tools:ignore="ContentDescription" />
 
-</ViewSwitcher>
+</merge>
